@@ -93,16 +93,10 @@ app.get('/tasks/:id', (req, res) => {
 
 // Update a task.
 app.put('/tasks/:id', (req, res) => {
-  let sql = `UPDATE task SET 
-              title = ?,
-              description = ?,
-              state_id = ?,
-              priority_id = ?,
-              due_date = ?,
-              WHERE id = ?`
+  let sql = `UPDATE task SET title = ?, description = ?, state_id = ?, priority_id = ?, due_date = ?, WHERE id = ?`
   db.run(sql, 
-    [req.params.title, req.params.description, req.paramst.stateId, 
-      req.params.priorityId, req.params.dueDate, req.params.id],
+    [req.body.title, req.body.description, req.body.stateId, 
+      req.body.priorityId, req.body.dueDate, req.body.id],
     (err) => {
     if (err) {
       throw err

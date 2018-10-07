@@ -1,39 +1,46 @@
 
 <template>
-  <div class="tasks">
-    <h1>Edit Task</h1>
-      <div class="form">
-        <div>
-          <input type="text" name="title" placeholder="TITLE" v-model="title">
-        </div>
-        <div>
-          <textarea rows="15" cols="15" placeholder="DESCRIPTION" v-model="description"></textarea>
-        </div>
-        <div>
-          <select v-model="priorityId">
-            <option disabled value="">Select a task priority</option>
-            <option v-for="priority in priorities" v-bind:value="priority.id" v-bind:key="priority.id" id="due-date">
-              {{ priority.name }}
-            </option>
-          </select>
-        </div>
-        <div>
-          <select v-model="stateId">
-            <option disabled value="">Select a task state</option>
-            <option v-for="state in states" v-bind:value="state.id" v-bind:key="state.id" id="due-date">
-              {{ state.name }}
-            </option>
-          </select>
-        </div>
-        <div>
-          <label for="due-date">Due Date</label>
-          <input type="datetime-local" v-model="dueDate">
-        </div>
-        <div>
-          <button class="app_task_btn" @click="updateTask">Update</button>
-        </div>
-      </div>
-  </div>
+  <b-container>
+    <b-row>
+      <b-col cols="1"></b-col>
+      <b-col cols="6">
+        <b-alert :show="invalidTitleAlert" dismissible variant="warning">
+          The title of a task can not be empty.
+        </b-alert>
+        <h1>Edit Task</h1>
+        <b-form @submit="updateTask">
+          <b-form-group label="Title" :invalid-feedback="invalidTitle" :state="titleState">
+            <b-form-input id="titleInput" type="text" v-model="title" placeholder="Name your task.">
+            </b-form-input>
+          </b-form-group>
+          <b-form-group label="Description">
+            <b-form-textarea id="descriptionInput" type="textarea" :rows="3" :max-rows="10" v-model="description" placeholder="Describe your task.">
+            </b-form-textarea>
+          </b-form-group>
+          <b-form-group label="Priority">
+            <b-form-select id="priorityInput" :options="priorityOptions" v-model="priorityId" placeholder="Prioritize your task.">
+            </b-form-select>
+          </b-form-group>
+          <b-form-group label="State">
+            <b-form-select id="stateInput" :options="stateOptions" v-model="stateId">
+            </b-form-select>
+          </b-form-group>
+          <b-form-group label="Due Date">
+            <b-form-input id="endDateInput" type="datetime-local" v-model="dueDate">
+            </b-form-input>
+          </b-form-group>
+          <b-button type="submit" variant="primary">Update Task</b-button>
+        </b-form>
+      </b-col>
+      <b-col cols="4">
+        <h1>Comments</h1>
+        <b-card v-for="comment in comments">
+          {{ comment.contents }}
+        </b-card>
+      </b-col>
+      <b-col cols="1"></b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
@@ -50,9 +57,13 @@ export default {
       priorityId: -1,
       stateId: -1,
       dueDate: null,
-      priorities: [],
-      states: [],
-      comments: []
+      priorityOptions: [],
+      stateOptions: [],
+      comments: [],
+      // Message given for an empty title.
+      invalidTitle: 'Title can not be empty.',
+      // Whether the alert for an invalid title should be shown.
+      invalidTitleAlert: false
     }
   },
   mounted () {
@@ -61,17 +72,36 @@ export default {
     this.getComments()
     this.getTask()
   },
+  computed: {
+    titleState () {
+      return this.title.length > 0
+    }
+  },
   methods: {
     async fetchPriorities () {
+      this.priorityOptions = []
       const response = await PriorityService.fetchPriorities()
-      this.priorities = response.data
+      for (var i = 0; i < response.data.length; i++) {
+        let newPriorityOption = {
+          value: response.data[i].id,
+          text: response.data[i].name
+        }
+        this.priorityOptions.push(newPriorityOption)
+      }
     },
     async fetchStates () {
+      this.stateOptions = []
       const response = await StateService.fetchStates()
-      this.states = response.data
+      for (var i = 0; i < response.data.length; i++) {
+        let newStateOption = {
+          value: response.data[i].id,
+          text: response.data[i].name
+        }
+        this.stateOptions.push(newStateOption)
+      }
     },
     async getComments () {
-      const response = await TasksService.getComments({
+      const response = await TasksService.getTaskComments({
         taskId: this.$route.params.id
       })
       this.comments = response.data
@@ -82,9 +112,9 @@ export default {
       })
       this.title = response.data.title
       this.description = response.data.description
-      this.priorityId = response.data.priorityId
-      this.stateId = response.data.stateId
-      this.dueDate = response.data.dueDate
+      this.priorityId = response.data.priority_id
+      this.stateId = response.data.state_id
+      this.dueDate = response.data.due_date.replace(' ', 'T')
     },
     async updateTask () {
       await TasksService.updateTask({
@@ -93,13 +123,14 @@ export default {
         description: this.description,
         priorityId: this.priorityId,
         stateId: this.stateId,
-        dueDate: this.dueDate
+        dueDate: this.dueDate.replace('T', ' ')
       })
       this.$router.push({ name: 'Tasks' })
     }
   }
 }
 </script>
+
 <style type="text/css">
 .form input, .form textarea {
   width: 500px;

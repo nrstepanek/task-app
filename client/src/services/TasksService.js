@@ -10,6 +10,8 @@ export default {
   },
 
   updateTask (params) {
+    console.log('Updating task with...')
+    console.log(params)
     return Api().put('tasks/' + params.id, params)
   },
 
