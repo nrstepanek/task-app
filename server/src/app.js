@@ -44,6 +44,27 @@ app.get('/states', (req, res) => {
   })
 })
 
+// 'comments' endpoint
+
+// Add a comment.
+app.post('/comments', (req, res) => {
+  let author = 1
+  let contents = req.body.contents
+  let taskId = req.body.taskId
+
+  let sql = `INSERT INTO comment (author, contents, task_id)
+              VALUES (?, ?, ?)`
+  db.run(sql, [author, contents, taskId], (err) => {
+    if (err) {
+      throw err
+    }
+    res.send({
+      success: true,
+      message: 'Comment saved succesfully.'
+    })
+  })
+})
+
 // 'tasks' endpoint
 
 // Get all tasks.

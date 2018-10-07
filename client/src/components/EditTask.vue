@@ -14,7 +14,7 @@
             </b-form-input>
           </b-form-group>
           <b-form-group label="Description">
-            <b-form-textarea id="descriptionInput" type="textarea" :rows="3" :max-rows="10" v-model="description" placeholder="Describe your task.">
+            <b-form-textarea id="descriptionInput" :rows="3" :max-rows="10" v-model="description" placeholder="Describe your task.">
             </b-form-textarea>
           </b-form-group>
           <b-form-group label="Priority">
@@ -34,9 +34,16 @@
       </b-col>
       <b-col cols="4">
         <h1>Comments</h1>
-        <b-card v-for="comment in comments">
+        <b-card v-for="comment in comments" v-bind:key="comment.id">
           {{ comment.contents }}
         </b-card>
+        <b-form @submit="addComment">
+          <b-form-group>
+            <b-form-textarea id="commentInput" :rows="5" :max-rows="10" v-model="commentToAdd" placeholder="Add a comment to this task.">
+            </b-form-textarea>
+          </b-form-group>
+          <b-button type="submit" variant="primary">Add Comment</b-button>
+        </b-form>
       </b-col>
       <b-col cols="1"></b-col>
     </b-row>
@@ -47,6 +54,7 @@
 import TasksService from '@/services/TasksService'
 import PriorityService from '@/services/PriorityService'
 import StateService from '@/services/StateService'
+import CommentService from '@/services/CommentService'
 
 export default {
   name: 'EditTask',
@@ -60,6 +68,7 @@ export default {
       priorityOptions: [],
       stateOptions: [],
       comments: [],
+      commentToAdd: '',
       // Message given for an empty title.
       invalidTitle: 'Title can not be empty.',
       // Whether the alert for an invalid title should be shown.
@@ -126,6 +135,13 @@ export default {
         dueDate: this.dueDate.replace('T', ' ')
       })
       this.$router.push({ name: 'Tasks' })
+    },
+    async addComment () {
+      await CommentService.addComment({
+        contents: this.commentToAdd,
+        taskId: this.$route.params.id
+      })
+      this.$router.go(this.$router.currentRoute)
     }
   }
 }

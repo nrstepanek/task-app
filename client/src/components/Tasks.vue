@@ -1,41 +1,47 @@
 
 <template>
-  <div class="tasks">
-    <h1>Tasks</h1>
-    <div v-if="tasks.length > 0" class="table-wrap">
-      <div>
-        <router-link v-bind:to="{ name: 'NewTask' }" class="">
-          Add Task
-        </router-link>
-      </div>
-      <table>
-        <tr>
-          <td>ID</td>
-          <td>Title</td>
-          <td>Priority</td>
-          <td>State</td>
-          <td>Due Date</td>
-          <td>Actions</td>
-        </tr>
-        <tr v-for="task in tasks" v-bind:key="task.title">
-          <td>{{ task.id }}</td>
-          <td>{{ task.title }}</td>
-          <td>{{ priorityMap[task.priority_id] }}</td>
-          <td>{{ task.state }}</td>
-          <td>{{ task.due_date }}</td>
-          <td align="center">
-            <router-link v-bind:to="{ name: 'NewTask', params: { parentId: task.id } }">Create Subtask</router-link> |
-            <router-link v-bind:to="{ name: 'EditTask', params: { id: task.id } }">Edit</router-link> |
-            <a href="#" @click="deleteTask(task.id)">Delete</a>
-          </td>
-        </tr>
-      </table>
-    </div>
-    <div v-else>
-      There are no tasks, add one! <br><br>
-      <router-link v-bind:to="{ name: 'NewTask' }" class="add_task_link">Add Task</router-link>
-    </div>
-  </div>
+  <b-container class="tasks">
+    <b-row>
+      <b-col cols="1"></b-col>
+      <b-col cols="12">
+        <h1>Tasks</h1>
+        <div v-if="tasks.length > 0" class="table-wrap">
+          <div>
+            <router-link v-bind:to="{ name: 'NewTask' }" class="">
+              Add Task
+            </router-link>
+          </div>
+          <table>
+            <tr>
+              <td>ID</td>
+              <td>Title</td>
+              <td>Priority</td>
+              <td>State</td>
+              <td>Due Date</td>
+              <td>Actions</td>
+            </tr>
+            <tr v-for="task in tasks" v-bind:key="task.title">
+              <td>{{ task.id }}</td>
+              <td>{{ task.title }}</td>
+              <td>{{ priorityMap[task.priority_id] }}</td>
+              <td>{{ stateMap[task.state_id] }}</td>
+              <td>{{ task.due_date }}</td>
+              <td align="center">
+                <router-link v-bind:to="{ name: 'NewTask', params: { parentId: task.id } }">Create Subtask</router-link> |
+                <router-link v-bind:to="{ name: 'EditTask', params: { id: task.id } }">Edit</router-link> |
+                <a href="#" @click="deleteTask(task.id)">Delete</a>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div v-else>
+          There are no tasks, add one! <br><br>
+          <router-link v-bind:to="{ name: 'NewTask' }" class="add_task_link">Add Task</router-link>
+        </div>
+      </b-col>
+      <b-col cols="1"></b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
@@ -48,11 +54,13 @@ export default {
   data () {
     return {
       tasks: [],
-      priorityMap: {}
+      priorityMap: {},
+      stateMap: {}
     }
   },
   mounted () {
     this.buildPriorityMap()
+    this.buildStateMap()
     this.getTasks()
   },
   methods: {
@@ -65,6 +73,7 @@ export default {
     async buildStateMap () {
       const response = await StateService.fetchStates()
       for (var i = 0; i < response.data.length; i++) {
+        console.log(response.data[i].name)
         this.stateMap[response.data[i].id] = response.data[i].name
       }
     },
