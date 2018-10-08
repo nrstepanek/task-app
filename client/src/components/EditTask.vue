@@ -143,7 +143,7 @@ export default {
         contents: this.commentToAdd,
         taskId: this.$route.params.id
       })
-      this.$router.go(this.$router.currentRoute)
+      this.getComments()
     }
   }
 }

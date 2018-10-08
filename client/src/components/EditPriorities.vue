@@ -95,7 +95,7 @@ export default {
   margin-top: 10px;
 }
 .table-wrap {
-  width: 60%;
+  width: 100%;
   margin: 0 auto;
   margin-top: 10px;
   text-align: center;

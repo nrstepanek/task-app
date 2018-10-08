@@ -94,7 +94,7 @@ export default {
           description: this.description,
           priority: this.priorityId,
           dueDate: this.dueDate,
-          parentId: this.parentId
+          parentId: this.$route.params.parentId
         })
         this.$router.push({ name: 'Tasks' })
       } else {
