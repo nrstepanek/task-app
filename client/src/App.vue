@@ -32,5 +32,38 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  background-color: #fcffff;
+}
+.table-wrap {
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 10px;
+  text-align: center;
+}
+table, td {
+  border: 1px solid black;
+}
+table th, table tr {
+  text-align: left;
+}
+table thead {
+  background: #f2f2f2;
+}
+table tr td {
+  padding: 10px;
+}
+table tr:nth-child(odd) {
+  background: #e2e2e2;
+}
+table tr:nth-child(even) {
+  background: #faffff;
+}
+table tr:nth-child(1) {
+  background: #343a40;
+  color: #fff;
+}
+a {
+  color: #4d7ef7;
+  text-decoration: none;
 }
 </style>

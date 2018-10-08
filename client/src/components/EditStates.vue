@@ -94,28 +94,6 @@ export default {
 .states {
   margin-top: 10px;
 }
-.table-wrap {
-  width: 100%;
-  margin: 0 auto;
-  margin-top: 10px;
-  text-align: center;
-}
-table th, table tr {
-  text-align: left;
-}
-table thead {
-  background: #f2f2f2;
-}
-table tr td {
-  padding: 10px;
-}
-table tr:nth-child(odd) {
-  background: #f2f2f2;
-}
-table tr:nth-child(1) {
-  background: #4d7ef7;
-  color: #fff;
-}
 a {
   color: #4d7ef7;
   text-decoration: none;

@@ -191,6 +191,9 @@ div {
   margin-top: 10px;
   text-align: center;
 }
+table, td {
+  border: 1px solid black;
+}
 table th, table tr {
   text-align: left;
 }
@@ -201,10 +204,13 @@ table tr td {
   padding: 10px;
 }
 table tr:nth-child(odd) {
-  background: #f2f2f2;
+  background: #e2e2e2;
+}
+table tr:nth-child(even) {
+  background: #faffff;
 }
 table tr:nth-child(1) {
-  background: #4d7ef7;
+  background: #343a40;
   color: #fff;
 }
 .edit-container {
