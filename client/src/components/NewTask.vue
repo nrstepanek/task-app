@@ -88,7 +88,7 @@ export default {
     },
     async addTask () {
       // Only add the task if the title is valid.
-      if (this.titleState()) {
+      if (this.title.length > 0) {
         await TasksService.addTask({
           title: this.title,
           description: this.description,

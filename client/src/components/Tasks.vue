@@ -4,13 +4,8 @@
     <b-row>
       <b-col cols="1"></b-col>
       <b-col cols="12">
-        <h1>Tasks</h1>
+        <h1>All Tasks</h1>
         <div v-if="tasks.length > 0" class="table-wrap">
-          <div>
-            <router-link v-bind:to="{ name: 'NewTask' }" class="">
-              Add Task
-            </router-link>
-          </div>
           <table>
             <tr>
               <td>ID</td>
@@ -79,6 +74,10 @@ export default {
     },
     async getTasks () {
       const response = await TasksService.fetchTasks()
+      // Fix dates.
+      for (var i = 0; i < response.data.length; i++) {
+        response.data[i].due_date = response.data[i].due_date.replace('T', ' ')
+      }
       this.tasks = response.data
       console.log(this.tasks)
     },
@@ -92,9 +91,14 @@ export default {
 </script>
 
 <style type="text/css">
+.tasks {
+  margin-top: 10px;
+}
+
 .table-wrap {
   width: 60%;
   margin: 0 auto;
+  margin-top: 10px;
   text-align: center;
 }
 table th, table tr {

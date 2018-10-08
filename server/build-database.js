@@ -47,8 +47,8 @@ db.serialize(() => {
   );`)
   .run(`INSERT INTO 
     task(title, state_id, priority_id, description, due_date, parent_task_id) VALUES
-          ('Create App', 1, 1, 'We need to create the app.', CURRENT_TIMESTAMP, NULL),
-          ('Test App', 1, 1, 'We need to test the app.', CURRENT_TIMESTAMP, NULL)`)
+          ('Create App', 1, 1, 'We need to create the app.', '2018-10-05 15:30', NULL),
+          ('Test App', 1, 1, 'We need to test the app.', '2018-10-07 09:15', NULL)`)
 
   
   // Create comment table.

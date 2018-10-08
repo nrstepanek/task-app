@@ -34,8 +34,8 @@
       </b-col>
       <b-col cols="4">
         <h1>Comments</h1>
-        <b-card v-for="comment in comments" v-bind:key="comment.id">
-          {{ comment.contents }}
+        <b-card v-for="comment in comments" v-bind:key="comment.id" v-bind:footer="'created on ' + comment.create_date">
+          <p class="card-text">{{ comment.contents }}</p>
         </b-card>
         <b-form @submit="addComment">
           <b-form-group>
@@ -168,5 +168,9 @@ export default {
   width: 520px;
   border: none;
   cursor: pointer;
+}
+
+.card-body {
+  padding: 5px;
 }
 </style>

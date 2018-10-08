@@ -30,6 +30,38 @@ app.get('/priorities', (req, res) => {
   })
 })
 
+// Add a priority.
+app.post('/priorities', (req, res) => {
+  let name = req.body.name
+  let description = req.body.description
+
+  let sql = `INSERT INTO priority (name, description)
+              VALUES (?, ?)`
+
+  db.run(sql, [name, description], (err) => {
+    if (err) {
+      throw err
+    }
+    res.send({
+      success: true,
+      message: 'Priority saved succesfully.'
+    })
+  })
+})
+
+// Delete a priority.
+app.delete('/priorities/:id', (req, res) => {
+  let sql = `DELETE FROM priority WHERE id = ?`
+  db.run(sql, [req.params.id], (err) => {
+    if (err) {
+      throw err
+    }
+    res.send({
+      success: true
+    })
+  })
+})
+
 // 'states' endpoint
 
 // Get all states.
@@ -41,6 +73,38 @@ app.get('/states', (req, res) => {
       throw err
     }
     res.send(rows)
+  })
+})
+
+// Add a state.
+app.post('/states', (req, res) => {
+  let name = req.body.name
+  let description = req.body.description
+
+  let sql = `INSERT INTO state (name, description)
+              VALUES (?, ?)`
+
+  db.run(sql, [name, description], (err) => {
+    if (err) {
+      throw err
+    }
+    res.send({
+      success: true,
+      message: 'State saved succesfully.'
+    })
+  })
+})
+
+// Delete a state.
+app.delete('/states/:id', (req, res) => {
+  let sql = `DELETE FROM state WHERE id = ?`
+  db.run(sql, [req.params.id], (err) => {
+    if (err) {
+      throw err
+    }
+    res.send({
+      success: true
+    })
   })
 })
 
@@ -114,7 +178,8 @@ app.get('/tasks/:id', (req, res) => {
 
 // Update a task.
 app.put('/tasks/:id', (req, res) => {
-  let sql = `UPDATE task SET title = ?, description = ?, state_id = ?, priority_id = ?, due_date = ?, WHERE id = ?`
+  let sql = `UPDATE task SET title = ?, description = ?, state_id = ?, 
+      priority_id = ?, due_date = ? WHERE id = ?`
   db.run(sql, 
     [req.body.title, req.body.description, req.body.stateId, 
       req.body.priorityId, req.body.dueDate, req.body.id],

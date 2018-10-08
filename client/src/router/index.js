@@ -1,19 +1,14 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
 import Tasks from '@/components/Tasks'
 import NewTask from '@/components/NewTask'
 import EditTask from '@/components/EditTask'
+import EditPriorities from '@/components/EditPriorities'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
-    {
-      path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
-    },
     {
       path: '/tasks',
       name: 'Tasks',
@@ -28,6 +23,11 @@ export default new Router({
       path: '/tasks/:id',
       name: 'EditTask',
       component: EditTask
+    },
+    {
+      path: '/priorities',
+      name: 'EditPriorities',
+      component: EditPriorities
     }
   ]
 })
