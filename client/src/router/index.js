@@ -4,6 +4,7 @@ import Tasks from '@/components/Tasks'
 import NewTask from '@/components/NewTask'
 import EditTask from '@/components/EditTask'
 import EditPriorities from '@/components/EditPriorities'
+import EditStates from '@/components/EditStates'
 
 Vue.use(Router)
 
@@ -28,6 +29,11 @@ export default new Router({
       path: '/priorities',
       name: 'EditPriorities',
       component: EditPriorities
+    },
+    {
+      path: '/states',
+      name: 'EditStates',
+      component: EditStates
     }
   ]
 })

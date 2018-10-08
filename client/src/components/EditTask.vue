@@ -1,11 +1,11 @@
 
 <template>
-  <b-container>
+  <b-container class="edit-container">
     <b-row>
       <b-col cols="1"></b-col>
-      <b-col cols="6">
+      <b-col cols="5" class="edit-column">
         <b-alert :show="invalidTitleAlert" dismissible variant="warning">
-          The title of a task can not be empty.
+          The title of a task cannot be empty.
         </b-alert>
         <h1>Edit Task</h1>
         <b-form @submit="updateTask">
@@ -32,11 +32,13 @@
           <b-button type="submit" variant="primary">Update Task</b-button>
         </b-form>
       </b-col>
-      <b-col cols="4">
+      <b-col cols="5" class="comment-column">
         <h1>Comments</h1>
-        <b-card v-for="comment in comments" v-bind:key="comment.id" v-bind:footer="'created on ' + comment.create_date">
-          <p class="card-text">{{ comment.contents }}</p>
-        </b-card>
+        <div v-for="comment in comments" v-bind:key="comment.id" class="comment-div">
+          <b-card v-bind:footer="'someuser - ' + comment.create_date">
+            <p class="card-text">{{ comment.contents }}</p>
+          </b-card>
+        </div>
         <b-form @submit="addComment">
           <b-form-group>
             <b-form-textarea id="commentInput" :rows="5" :max-rows="10" v-model="commentToAdd" placeholder="Add a comment to this task.">
@@ -169,8 +171,20 @@ export default {
   border: none;
   cursor: pointer;
 }
-
+.edit-container {
+  margin-top: 1rem;
+}
+.comment-column {
+  margin-bottom: 1rem;
+}
+.comment-div {
+  padding: 10px;
+}
+.card-footer {
+  padding: 0px;
+  font-size: 0.8rem;
+}
 .card-body {
-  padding: 5px;
+  padding: 0.5rem;
 }
 </style>

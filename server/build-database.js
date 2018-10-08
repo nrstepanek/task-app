@@ -25,7 +25,7 @@ db.serialize(() => {
   description TEXT
   )`)
   .run(`INSERT INTO state(name, description) VALUES
-          ('Unassigned', 'This task has not bees assigned to anyone.'),
+          ('Unassigned', 'This task has not been assigned to anyone.'),
           ('Assigned', 'This task has been assigned but not started.'),
           ('In Progress', 'This task is being worked.'),
           ('Complete', 'This task has been completed.')
@@ -43,8 +43,9 @@ db.serialize(() => {
   due_date        DATETIME,
   parent_task_id  INTEGER,
   FOREIGN KEY(state_id) REFERENCES state(id),
-  FOREIGN KEY(priority_id) REFERENCES priority(id)
-  );`)
+  FOREIGN KEY(priority_id) REFERENCES priority(id),
+  FOREIGN KEY(parent_task_id) REFERENCES task(id)
+  )`)
   .run(`INSERT INTO 
     task(title, state_id, priority_id, description, due_date, parent_task_id) VALUES
           ('Create App', 1, 1, 'We need to create the app.', '2018-10-05 15:30', NULL),

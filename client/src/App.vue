@@ -8,8 +8,10 @@
         <b-navbar-nav>
           <b-nav-item href="#/tasks">Tasks</b-nav-item>
           <b-nav-item href="#/tasks/new">New Task</b-nav-item>
-          <b-nav-item href="#/priorities">Edit Priorities</b-nav-item>
-          <b-nav-item href="#/states">Edit States</b-nav-item>
+          <b-nav-item-dropdown text="Admin Tools" right>
+            <b-dropdown-item href="#/priorities">Edit Priorities</b-dropdown-item>
+            <b-dropdown-item href="#/states">Edit States</b-dropdown-item>
+          </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>

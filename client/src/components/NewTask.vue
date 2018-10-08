@@ -1,15 +1,15 @@
 <template>
-  <b-container>
+  <b-container class="new-task">
     <b-row>
       <b-col></b-col>
       <b-col cols="10">
         <b-alert :show="invalidTitleAlert" dismissible variant="warning">
-          The title of a task can not be empty.
+          The title of a task cannot be empty.
         </b-alert>
         <h1>Create Task</h1>
-        <div v-if="parentTask != null">
+        <p v-if="parentTask != null" class="parent-task-text">
           Subtask of TASK-{{ parentTask.id }} "{{ parentTask.title }}"
-        </div>
+        </p>
         <b-form @submit="addTask">
           <b-form-group label="Title" :invalid-feedback="invalidTitle" :state="titleState">
             <b-form-input id="titleInput" type="text" v-model="title" placeholder="Name your task.">
@@ -106,6 +106,9 @@ export default {
 </script>
 
 <style type="text/css">
+.new-task {
+  margin-top: 10px;
+}
 .form input, .form textarea, .form select, .form b-form-textarea {
   width: 500px;
   padding: 10px;
@@ -129,5 +132,8 @@ export default {
   width: 520px;
   border: none;
   cursor: pointer;
+}
+.parent-task-text {
+  color: #499;
 }
 </style>

@@ -6,5 +6,8 @@ export default {
   },
   deletePriority (id) {
     return Api().delete('priorities/' + id)
+  },
+  addPriority (params) {
+    return Api().post('priorities', params)
   }
 }

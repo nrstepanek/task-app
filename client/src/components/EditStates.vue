@@ -1,10 +1,10 @@
 
 <template>
-  <b-container class="priorities">
+  <b-container class="states">
     <b-row>
       <b-col cols="1"></b-col>
-      <b-col cols="5">
-        <h1>Priorities</h1>
+      <b-col cols="6">
+        <h1>States</h1>
         <table align="center">
           <tr>
             <td>ID</td>
@@ -12,31 +12,31 @@
             <td>Description</td>
             <td>Action</td>
           </tr>
-          <tr v-for="priority in priorities" v-bind:key="priority.id">
-            <td>{{ priority.id }}</td>
-            <td>{{ priority.name }}</td>
-            <td>{{ priority.description }}</td>
+          <tr v-for="state in states" v-bind:key="state.id">
+            <td>{{ state.id }}</td>
+            <td>{{ state.name }}</td>
+            <td>{{ state.description }}</td>
             <td align="center">
-              <a href="#" @click="deletePriority(priority.id)">Delete</a>
+              <a href="#" @click="deleteState(state.id)">Delete</a>
             </td>
           </tr>
         </table>
       </b-col>
-      <b-col cols="5">
-        <b-alert :show="invalidPriorityAlert" dismissible variant="warning">
-          The name of a priority cannot be empty.
+      <b-col cols="4">
+        <b-alert :show="invalidStateAlert" dismissible variant="warning">
+          The name of a state cannot be empty.
         </b-alert>
-        <h1>Add a Priority</h1>
-        <b-form @submit="addPriority">
+        <h1>Add a State</h1>
+        <b-form @submit="addState">
           <b-form-group label="Name" :state="nameState">
-            <b-form-input id="nameInput" type="text" v-model="name" placeholder="Name of priority.">
+            <b-form-input id="nameInput" type="text" v-model="name" placeholder="Name of state.">
             </b-form-input>
           </b-form-group>
           <b-form-group label="Description">
-            <b-form-textarea id="descriptionInput" type="textarea" :rows="3" :max-rows="10" v-model="description" placeholder="Describe this priority.">
+            <b-form-textarea id="descriptionInput" type="textarea" :rows="3" :max-rows="10" v-model="description" placeholder="Describe this state.">
             </b-form-textarea>
           </b-form-group>
-          <b-button type="submit" variant="primary">Add Priority</b-button>
+          <b-button type="submit" variant="primary">Add State</b-button>
         </b-form>
       </b-col>
       <b-col cols="1"></b-col>
@@ -45,20 +45,20 @@
 </template>
 
 <script>
-import PriorityService from '@/services/PriorityService'
+import StateService from '@/services/StateService'
 
 export default {
-  name: 'priorities',
+  name: 'states',
   data () {
     return {
-      priorities: [],
+      states: [],
       name: '',
       description: '',
-      invalidPriorityAlert: false
+      invalidStateAlert: false
     }
   },
   mounted () {
-    this.getPriorities()
+    this.getStates()
   },
   computed: {
     nameState () {
@@ -66,24 +66,24 @@ export default {
     }
   },
   methods: {
-    async getPriorities () {
-      const response = await PriorityService.fetchPriorities()
-      this.priorities = response.data
+    async getStates () {
+      const response = await StateService.fetchStates()
+      this.states = response.data
     },
-    async deletePriority (id) {
-      await PriorityService.deletePriority(id)
+    async deleteState (id) {
+      await StateService.deleteState(id)
       this.$router.go(this.$router.currentRoute)
     },
-    async addPriority () {
+    async addState () {
       // Only add the priority if the title is valid.
       if (this.name.length > 0) {
-        await PriorityService.addPriority({
+        await StateService.addState({
           name: this.name,
           description: this.description
         })
         this.$router.go(this.$router.currentRoute)
       } else {
-        this.invalidPriorityAlert = true
+        this.invalidStateAlert = true
       }
     }
   }
@@ -91,7 +91,7 @@ export default {
 </script>
 
 <style>
-.priorities {
+.states {
   margin-top: 10px;
 }
 .table-wrap {

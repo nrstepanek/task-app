@@ -2,8 +2,7 @@
 <template>
   <b-container class="tasks">
     <b-row>
-      <b-col cols="1"></b-col>
-      <b-col cols="12">
+      <b-col cols="6">
         <h1>All Tasks</h1>
         <div v-if="tasks.length > 0" class="table-wrap">
           <table>
@@ -17,7 +16,7 @@
             </tr>
             <tr v-for="task in tasks" v-bind:key="task.title">
               <td>{{ task.id }}</td>
-              <td>{{ task.title }}</td>
+              <td><a href="#/tasks" @click.prevent="selectTask(task.id)">{{ task.title }}</a></td>
               <td>{{ priorityMap[task.priority_id] }}</td>
               <td>{{ stateMap[task.state_id] }}</td>
               <td>{{ task.due_date }}</td>
@@ -34,7 +33,11 @@
           <router-link v-bind:to="{ name: 'NewTask' }" class="add_task_link">Add Task</router-link>
         </div>
       </b-col>
-      <b-col cols="1"></b-col>
+      <b-col cols="6">
+        <div v-if="selectedTask > 0">
+          TASK-{{ selectedTask }} {{ tasks[selectedTaskI].title }}
+        </div>
+      </b-col>
     </b-row>
   </b-container>
 </template>
@@ -50,7 +53,9 @@ export default {
     return {
       tasks: [],
       priorityMap: {},
-      stateMap: {}
+      stateMap: {},
+      selectedTask: -1,
+      selectedTaskI: -1
     }
   },
   mounted () {
@@ -59,6 +64,14 @@ export default {
     this.getTasks()
   },
   methods: {
+    selectTask (id) {
+      console.log('Selecting ' + id)
+      this.selectedTask = id
+      this.selectedTaskI = this.tasks.findIndex((task) => {
+        return task.id === id
+      })
+      console.log(this.selectedTaskI)
+    },
     async buildPriorityMap () {
       const response = await PriorityService.fetchPriorities()
       for (var i = 0; i < response.data.length; i++) {
@@ -79,11 +92,13 @@ export default {
         response.data[i].due_date = response.data[i].due_date.replace('T', ' ')
       }
       this.tasks = response.data
-      console.log(this.tasks)
     },
     async deleteTask (id) {
       console.log('Deleting task with id ' + id)
       await TasksService.deleteTask(id)
+      if (this.selectedTask === id) {
+        this.selectedTask = -1
+      }
       this.$router.push({ name: 'Tasks' })
     }
   }
@@ -96,7 +111,7 @@ export default {
 }
 
 .table-wrap {
-  width: 60%;
+  width: 100%;
   margin: 0 auto;
   margin-top: 10px;
   text-align: center;
@@ -117,16 +132,8 @@ table tr:nth-child(1) {
   background: #4d7ef7;
   color: #fff;
 }
-a {
+/*a {
   color: #4d7ef7;
   text-decoration: none;
-}
-a.add_task_link {
-  background: #4d7ef7;
-  color: #fff;
-  padding: 10px 80px;
-  text-transform: uppercase;
-  font-size: 12px;
-  font-weight: bold;
-}
+}*/
 </style>
