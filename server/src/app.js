@@ -49,7 +49,7 @@ app.post('/priorities', (req, res) => {
   })
 })
 
-// Delete a priority.
+// Delete the priority with the given id.
 app.delete('/priorities/:id', (req, res) => {
   let sql = `DELETE FROM priority WHERE id = ?`
   db.run(sql, [req.params.id], (err) => {
@@ -95,7 +95,7 @@ app.post('/states', (req, res) => {
   })
 })
 
-// Delete a state.
+// Delete the state with the given id.
 app.delete('/states/:id', (req, res) => {
   let sql = `DELETE FROM state WHERE id = ?`
   db.run(sql, [req.params.id], (err) => {
@@ -164,7 +164,7 @@ app.post('/tasks', (req, res) => {
   })
 })
 
-// Get a single task.
+// Get a single task with the given id.
 app.get('/tasks/:id', (req, res) => {
   let sql = `SELECT * FROM task WHERE id = ?`
 
@@ -176,7 +176,7 @@ app.get('/tasks/:id', (req, res) => {
   })
 })
 
-// Update a task.
+// Update the task with the given id.
 app.put('/tasks/:id', (req, res) => {
   let sql = `UPDATE task SET title = ?, description = ?, state_id = ?, 
       priority_id = ?, due_date = ? WHERE id = ?`
@@ -193,7 +193,7 @@ app.put('/tasks/:id', (req, res) => {
   })
 })
 
-// Get comments for task.
+// Get comments for the given task.
 app.get('/tasks/comments/:taskid', (req, res) => {
   let sql = `SELECT * FROM comment WHERE task_id = ? ORDER BY create_date`
 
@@ -205,7 +205,7 @@ app.get('/tasks/comments/:taskid', (req, res) => {
   })
 })
 
-// Delete a task.
+// Delete the task with the given id.
 app.delete('/tasks/:id', (req, res) => {
   console.log("Deleting task with id " + req.params.id)
   let sql = `DELETE FROM task WHERE id = ?`
