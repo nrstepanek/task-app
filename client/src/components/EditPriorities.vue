@@ -17,7 +17,7 @@
             <td>{{ priority.name }}</td>
             <td>{{ priority.description }}</td>
             <td align="center">
-              <a href="#" @click="deletePriority(priority.id)">Delete</a>
+              <a href="#" @click.prevent="deletePriority(priority.id)">Delete</a>
             </td>
           </tr>
         </table>
@@ -27,7 +27,7 @@
           The name of a priority cannot be empty.
         </b-alert>
         <h1>Add a Priority</h1>
-        <b-form @submit="addPriority">
+        <b-form @submit.prevent="addPriority">
           <b-form-group label="Name" :state="nameState">
             <b-form-input id="nameInput" type="text" v-model="name" placeholder="Name of priority.">
             </b-form-input>
@@ -75,7 +75,7 @@ export default {
     // Delete the priority with the given id.
     async deletePriority (id) {
       await PriorityService.deletePriority(id)
-      this.$router.go(this.$router.currentRoute)
+      this.fetchPriorities()
     },
     // Add a priority if the user's inputs are valid.
     async addPriority () {
@@ -85,7 +85,7 @@ export default {
           name: this.name,
           description: this.description
         })
-        this.$router.go(this.$router.currentRoute)
+        this.$router.push({ name: 'EditPriorities' })
       } else {
         this.invalidPriorityAlert = true
       }

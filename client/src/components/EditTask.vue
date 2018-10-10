@@ -39,7 +39,7 @@
             <p class="card-text">{{ comment.contents }}</p>
           </b-card>
         </div>
-        <b-form @submit="addComment">
+        <b-form @submit.prevent="addComment">
           <b-form-group>
             <b-form-textarea id="commentInput" :rows="5" :max-rows="10" v-model="commentToAdd" placeholder="Add a comment to this task.">
             </b-form-textarea>

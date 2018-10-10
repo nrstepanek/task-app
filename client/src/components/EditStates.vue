@@ -17,7 +17,7 @@
             <td>{{ state.name }}</td>
             <td>{{ state.description }}</td>
             <td align="center">
-              <a href="#" @click="deleteState(state.id)">Delete</a>
+              <a href="#" @click.prevent="deleteState(state.id)">Delete</a>
             </td>
           </tr>
         </table>
@@ -75,7 +75,7 @@ export default {
     // Delete the state with the given id.
     async deleteState (id) {
       await StateService.deleteState(id)
-      this.$router.go(this.$router.currentRoute)
+      this.fetchStates()
     },
     // Add a state if user inputs are valid.
     async addState () {
@@ -85,7 +85,7 @@ export default {
           name: this.name,
           description: this.description
         })
-        this.$router.go(this.$router.currentRoute)
+        this.$router.push({ name: 'EditStates' })
       } else {
         this.invalidStateAlert = true
       }

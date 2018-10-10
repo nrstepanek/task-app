@@ -28,6 +28,7 @@ db.serialize(() => {
           ('Unassigned', 'This task has not been assigned to anyone.'),
           ('Assigned', 'This task has been assigned but not started.'),
           ('In Progress', 'This task is being worked.'),
+          ('Peer Review', 'This task in in peer review.'),
           ('Complete', 'This task has been completed.')
   `)
 
@@ -48,15 +49,18 @@ db.serialize(() => {
   )`)
   .run(`INSERT INTO 
     task(title, state_id, priority_id, description, due_date, parent_task_id) VALUES
-          ('Create App', 1, 1, 
+          ('Create App', 4, 3, 
             'We need to create the application for the customer. This will include designing the application and coding it in its entirety.', 
             '2018-10-05 15:30', NULL),
-          ('Test App', 1, 1, 
+          ('Test App', 3, 1, 
             'We need to test the application so that the customer does not receive it with bugs. This will involve writing unit tests for every class and end-to-end tests.', 
             '2018-11-07 09:15', NULL),
-          ('Deliver App', 1, 1, 
+          ('Deliver App', 2, 2, 
             'We need to deliver the application to the customer. This will involve burning a CD with the application on it and mailing it to their office.',
-            '2018-12-24 17:00', NULL)`)
+            '2018-12-24 17:00', NULL),
+          ('Market App', 1, 1,
+            'We need to market the application to find new customers and generate sales. We need to hire marketers who will help in this effort.',
+            '2019-02-01 11:00', NULL)`)
 
   
   // Create comment table.

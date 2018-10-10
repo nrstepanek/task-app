@@ -58,7 +58,7 @@
                   <td>{{ tasks[taskIndex].due_date }}</td>
                   <td align="center">
                     <router-link v-bind:to="{ name: 'EditTask', params: { id: tasks[taskIndex].id } }">Edit</router-link> |
-                    <a href="#" @click="deleteTask(tasks[taskIndex].id)">Delete</a>
+                    <a href="#" @click.prevent="deleteTask(tasks[taskIndex].id)">Delete</a>
                   </td>
                 </tr>
               </table>
@@ -74,7 +74,7 @@
                 <p class="card-text">{{ comment.contents }}</p>
               </b-card>
             </div>
-            <b-form @submit="addComment">
+            <b-form @submit.prevent="addComment">
               <b-form-group>
                 <b-form-textarea id="commentInput" :rows="5" :max-rows="10" v-model="commentToAdd" placeholder="Add a comment to this task.">
                 </b-form-textarea>
@@ -133,14 +133,18 @@ export default {
           return task.id === id
         })
         // Get all subtask indices for the selected task.
-        this.subtaskIndices = []
-        for (var i = 0; i < this.tasks.length; i++) {
-          if (this.tasks[i].parent_task_id === id) {
-            this.subtaskIndices.push(i)
-          }
-        }
+        this.getSubtaskIndices()
         // Get all comments for the selected task.
         this.fetchComments()
+      }
+    },
+    // Get all of the subtask indices for the selected task.
+    getSubtaskIndices () {
+      this.subtaskIndices = []
+      for (var i = 0; i < this.tasks.length; i++) {
+        if (this.tasks[i].parent_task_id === this.selectedTask) {
+          this.subtaskIndices.push(i)
+        }
       }
     },
     // Build a map of priority id to priority name.
