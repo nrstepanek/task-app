@@ -54,7 +54,7 @@ table tr td {
   padding: 10px;
 }
 table tr:nth-child(odd) {
-  background: #e2e2e2;
+  background: #f0f0f0;
 }
 table tr:nth-child(even) {
   background: #faffff;

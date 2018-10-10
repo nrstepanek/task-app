@@ -41,7 +41,7 @@
           <div class="subtasks">
             <h3>Subtasks:</h3>
             <div v-if="subtaskIndices.length > 0">
-              <table>
+              <table class="table-wrap">
                 <tr>
                   <td style="text-align: center">Title</td>
                   <td style="text-align: center">Priority</td>
@@ -55,7 +55,7 @@
                   <td>{{ stateMap[tasks[taskIndex].state_id] }}</td>
                   <td>{{ tasks[taskIndex].due_date }}</td>
                   <td align="center">
-                    <router-link v-bind:to="{ name: 'EditTask', params: { id: taskIndex } }">Edit</router-link> |
+                    <router-link v-bind:to="{ name: 'EditTask', params: { id: tasks[taskIndex].id } }">Edit</router-link> |
                     <a href="#" @click="deleteTask(taskIndex)">Delete</a>
                   </td>
                 </tr>
@@ -128,6 +128,7 @@ export default {
         return task.id === id
       })
       // Get all subtask indices for the selected task.
+      this.subtaskIndices = []
       for (var i = 0; i < this.tasks.length; i++) {
         if (this.tasks[i].parent_task_id === id) {
           this.subtaskIndices.push(i)
@@ -179,6 +180,7 @@ export default {
         taskId: this.selectedTask
       })
       this.fetchComments()
+      this.commentToAdd = ''
     }
   }
 }

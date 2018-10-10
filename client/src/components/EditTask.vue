@@ -146,6 +146,7 @@ export default {
       })
       // Refresh the comments after adding.
       this.fetchComments()
+      this.commentToAdd = ''
     }
   }
 }

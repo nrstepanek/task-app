@@ -80,9 +80,7 @@ export default {
     // If this new task is suppossed to be a subtask, get the parent task's fields.
     async subtaskSetup () {
       if (this.$route.params.parentId != null) {
-        const response = await TasksService.getTask({
-          id: this.$route.params.parentId
-        })
+        const response = await TasksService.getTask(this.$route.params.parentId)
         this.parentTask = response.data
       }
     },

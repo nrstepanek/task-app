@@ -2,7 +2,6 @@ const sqlite3 = require('sqlite3').verbose();
 
 let db = new sqlite3.Database('./db/tasks.db');
 
-
 db.serialize(() => {
   // Create priority table.
   db.run(`DROP TABLE IF EXISTS priority`)
@@ -14,7 +13,8 @@ db.serialize(() => {
   .run(`INSERT INTO priority(name, description) VALUES
           ('Low', 'Not an important task.'),
           ('Medium', 'A moderatly important task.'),
-          ('High', 'An important task.')
+          ('High', 'An important task.'),
+          ('Urgent', 'There will be overtime.')
   `)
 
   // Create state table.
