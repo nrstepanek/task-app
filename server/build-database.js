@@ -48,8 +48,15 @@ db.serialize(() => {
   )`)
   .run(`INSERT INTO 
     task(title, state_id, priority_id, description, due_date, parent_task_id) VALUES
-          ('Create App', 1, 1, 'We need to create the app.', '2018-10-05 15:30', NULL),
-          ('Test App', 1, 1, 'We need to test the app.', '2018-10-07 09:15', NULL)`)
+          ('Create App', 1, 1, 
+            'We need to create the application for the customer. This will include designing the application and coding it in its entirety.', 
+            '2018-10-05 15:30', NULL),
+          ('Test App', 1, 1, 
+            'We need to test the application so that the customer does not receive it with bugs. This will involve writing unit tests for every class and end-to-end tests.', 
+            '2018-11-07 09:15', NULL),
+          ('Deliver App', 1, 1, 
+            'We need to deliver the application to the customer. This will involve burning a CD with the application on it and mailing it to their office.',
+            '2018-12-24 17:00', NULL)`)
 
   
   // Create comment table.
@@ -63,7 +70,8 @@ db.serialize(() => {
   FOREIGN KEY(task_id) REFERENCES task(id)
   )`)
   .run(`INSERT INTO
-    comment(author, contents, task_id) VALUES
-    (1, 'I do not understand this task.', 1)
+    comment(author, contents, task_id, create_date) VALUES
+    (1, 'I do not understand this task. What exactly are we supposed to do?', 1, '2018-09-11 10:47'),
+    (1, 'I think we are supposed to make an app of some sort.', 1, '2018-09-11 12:22')
   `)
 })

@@ -62,33 +62,33 @@ export default {
   name: 'EditTask',
   data () {
     return {
-      title: '',
-      description: '',
-      priorityId: -1,
-      stateId: -1,
-      dueDate: null,
-      priorityOptions: [],
-      stateOptions: [],
-      comments: [],
-      commentToAdd: '',
-      // Message given for an empty title.
-      invalidTitle: 'Title can not be empty.',
-      // Whether the alert for an invalid title should be shown.
-      invalidTitleAlert: false
+      title: '', // The title of this task.
+      description: '', // The description of this task.
+      priorityId: -1, // The priority of this task.
+      stateId: -1, // The state of this task.
+      dueDate: null, // The due-date of this task.
+      priorityOptions: [], // All of the available priorities.
+      stateOptions: [], // All of the available states.
+      comments: [], // The comments on this task.
+      commentToAdd: '', // The comment to add to this task.
+      invalidTitle: 'Title can not be empty.', // Message given for an empty title.
+      invalidTitleAlert: false // Whether the alert for an invalid title should be shown.
     }
   },
   mounted () {
     this.fetchPriorities()
     this.fetchStates()
-    this.getComments()
+    this.fetchComments()
     this.getTask()
   },
   computed: {
+    // Whether the title of this task is valid or not.
     titleState () {
       return this.title.length > 0
     }
   },
   methods: {
+    // Fetch all priorities.
     async fetchPriorities () {
       this.priorityOptions = []
       const response = await PriorityService.fetchPriorities()
@@ -100,6 +100,7 @@ export default {
         this.priorityOptions.push(newPriorityOption)
       }
     },
+    // Fetch all states.
     async fetchStates () {
       this.stateOptions = []
       const response = await StateService.fetchStates()
@@ -111,22 +112,21 @@ export default {
         this.stateOptions.push(newStateOption)
       }
     },
-    async getComments () {
-      const response = await TasksService.getTaskComments({
-        taskId: this.$route.params.id
-      })
+    // Fetch all comments.
+    async fetchComments () {
+      const response = await TasksService.getTaskComments(this.$route.params.id)
       this.comments = response.data
     },
+    // Get the task with the given task id.
     async getTask () {
-      const response = await TasksService.getTask({
-        id: this.$route.params.id
-      })
+      const response = await TasksService.getTask(this.$route.params.id)
       this.title = response.data.title
       this.description = response.data.description
       this.priorityId = response.data.priority_id
       this.stateId = response.data.state_id
       this.dueDate = response.data.due_date.replace(' ', 'T')
     },
+    // Update the task with the given task id from user's inputs.
     async updateTask () {
       await TasksService.updateTask({
         id: this.$route.params.id,
@@ -138,12 +138,14 @@ export default {
       })
       this.$router.push({ name: 'Tasks' })
     },
+    // Add a comment to this task.
     async addComment () {
       await CommentService.addComment({
         contents: this.commentToAdd,
         taskId: this.$route.params.id
       })
-      this.getComments()
+      // Refresh the comments after adding.
+      this.fetchComments()
     }
   }
 }
@@ -159,17 +161,6 @@ export default {
 }
 .form div {
   margin: 20px;
-}
-.app_task_btn {
-  background: #4d7ef7;
-  color: #fff;
-  padding: 10px 80px;
-  text-transform: uppercase;
-  font-size: 12px;
-  font-weight: bold;
-  width: 520px;
-  border: none;
-  cursor: pointer;
 }
 .edit-container {
   margin-top: 1rem;

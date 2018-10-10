@@ -51,29 +51,33 @@ export default {
   name: 'priorities',
   data () {
     return {
-      priorities: [],
-      name: '',
-      description: '',
-      invalidPriorityAlert: false
+      priorities: [], // All of the priorities from the database.
+      name: '', // The name of the priority to add.
+      description: '', // The description of the priority to add.
+      invalidPriorityAlert: false // Whether the invalid priority alert should be shown.
     }
   },
   mounted () {
-    this.getPriorities()
+    this.fetchPriorities()
   },
   computed: {
+    // Whether the name of this priority is valid.
     nameState () {
       return this.name.length > 0
     }
   },
   methods: {
-    async getPriorities () {
+    // Fetch all priorities.
+    async fetchPriorities () {
       const response = await PriorityService.fetchPriorities()
       this.priorities = response.data
     },
+    // Delete the priority with the given id.
     async deletePriority (id) {
       await PriorityService.deletePriority(id)
       this.$router.go(this.$router.currentRoute)
     },
+    // Add a priority if the user's inputs are valid.
     async addPriority () {
       // Only add the priority if the title is valid.
       if (this.name.length > 0) {

@@ -43,17 +43,15 @@ export default {
   name: 'NewTask',
   data () {
     return {
-      title: '',
-      description: '',
-      priorityId: -1,
-      priorityOptions: [],
-      dueDate: '2018-07-30T15:00',
-      parentId: null,
-      parentTask: null,
-      // Message given for an empty title.
-      invalidTitle: 'Title can not be empty.',
-      // Whether the alert for an invalid title should be shown.
-      invalidTitleAlert: false
+      title: '', // The title of the task to add.
+      description: '', // The description of the task to add.
+      priorityId: -1, // The priority of the task to add.
+      priorityOptions: [], // All available priorities.
+      dueDate: '2018-07-30T15:00', // The due-date of the task to add.
+      parentId: null, // The parent id if this task is supposed to be a subtask.
+      parentTask: null, // The parent task's fields, if this task is supposed to be a subtask.
+      invalidTitle: 'Title can not be empty.', // Message given for an empty title.
+      invalidTitleAlert: false // Whether the alert for an invalid title should be shown.
     }
   },
   mounted () {
@@ -61,11 +59,13 @@ export default {
     this.subtaskSetup()
   },
   computed: {
+    // Whether the title for this task is valid.
     titleState () {
       return this.title.length > 0
     }
   },
   methods: {
+    // Fetch all priorities.
     async fetchPriorities () {
       this.priorityOptions = []
       const response = await PriorityService.fetchPriorities()
@@ -77,15 +77,16 @@ export default {
         this.priorityOptions.push(newPriorityOption)
       }
     },
+    // If this new task is suppossed to be a subtask, get the parent task's fields.
     async subtaskSetup () {
       if (this.$route.params.parentId != null) {
         const response = await TasksService.getTask({
           id: this.$route.params.parentId
         })
         this.parentTask = response.data
-        console.log(this.parentTask)
       }
     },
+    // Add the new task if it is valid.
     async addTask () {
       // Only add the task if the title is valid.
       if (this.title.length > 0) {
@@ -116,22 +117,8 @@ export default {
   outline: none;
   font-size: 12px;
 }
-#due-date {
-  width: 300px;
-}
 .form div {
   margin: 20px;
-}
-.app_task_btn {
-  background: #4d7ef7;
-  color: #fff;
-  padding: 10px 80px;
-  text-transform: uppercase;
-  font-size: 12px;
-  font-weight: bold;
-  width: 520px;
-  border: none;
-  cursor: pointer;
 }
 .parent-task-text {
   color: #499;

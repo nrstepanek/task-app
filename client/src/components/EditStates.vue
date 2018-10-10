@@ -51,29 +51,33 @@ export default {
   name: 'states',
   data () {
     return {
-      states: [],
-      name: '',
-      description: '',
-      invalidStateAlert: false
+      states: [], // All of the states from the database.
+      name: '', // The name of the state to add.
+      description: '', // The description of the state to add.
+      invalidStateAlert: false // Whether the invalid state alert should be shown.
     }
   },
   mounted () {
-    this.getStates()
+    this.fetchStates()
   },
   computed: {
+    // Whether the name of this state is valid.
     nameState () {
       return this.name.length > 0
     }
   },
   methods: {
-    async getStates () {
+    // Fetch all states.
+    async fetchStates () {
       const response = await StateService.fetchStates()
       this.states = response.data
     },
+    // Delete the state with the given id.
     async deleteState (id) {
       await StateService.deleteState(id)
       this.$router.go(this.$router.currentRoute)
     },
+    // Add a state if user inputs are valid.
     async addState () {
       // Only add the priority if the title is valid.
       if (this.name.length > 0) {
@@ -93,9 +97,5 @@ export default {
 <style>
 .states {
   margin-top: 10px;
-}
-a {
-  color: #4d7ef7;
-  text-decoration: none;
 }
 </style>

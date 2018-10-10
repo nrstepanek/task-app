@@ -4,26 +4,18 @@ export default {
   fetchTasks () {
     return Api().get('tasks')
   },
-
   addTask (params) {
     return Api().post('tasks', params)
   },
-
   updateTask (params) {
-    console.log('Updating task with...')
-    console.log(params)
     return Api().put('tasks/' + params.id, params)
   },
-
-  getTask (params) {
-    console.log('getTask id: ' + params.id)
-    return Api().get('tasks/' + params.id)
+  getTask (id) {
+    return Api().get('tasks/' + id)
   },
-
-  getTaskComments (params) {
-    return Api().get('tasks/comments/' + params.taskId)
+  getTaskComments (id) {
+    return Api().get('tasks/comments/' + id)
   },
-
   deleteTask (id) {
     return Api().delete('tasks/' + id)
   }

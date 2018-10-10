@@ -33,6 +33,7 @@ export default {
   text-align: center;
   color: #2c3e50;
   background-color: #fcffff;
+  font-size: 0.85rem;
 }
 .table-wrap {
   width: 100%;
@@ -65,5 +66,18 @@ table tr:nth-child(1) {
 a {
   color: #4d7ef7;
   text-decoration: none;
+}
+.comment-column {
+  margin-bottom: 1rem;
+}
+.comment-div {
+  padding: 10px;
+}
+.card-footer {
+  padding: 0px;
+  font-size: 0.8rem;
+}
+.card-body {
+  padding: 0.5rem;
 }
 </style>
