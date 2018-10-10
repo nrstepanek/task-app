@@ -205,10 +205,16 @@ app.get('/tasks/comments/:taskid', (req, res) => {
   })
 })
 
-// Delete the task with the given id.
+// Delete the task with the given id and its subtasks.
 app.delete('/tasks/:id', (req, res) => {
-  console.log("Deleting task with id " + req.params.id)
-  let sql = `DELETE FROM task WHERE id = ?`
+  let sql = `DELETE FROM task WHERE parent_task_id = ?`
+  db.run(sql, [req.params.id], (err) => {
+    if (err) {
+      throw err
+    }
+  })
+
+  sql = `DELETE FROM task WHERE id = ?`
   db.run(sql, [req.params.id], (err) => {
     if (err) {
       throw err

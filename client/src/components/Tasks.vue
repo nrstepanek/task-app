@@ -3,32 +3,34 @@
   <b-container class="tasks">
     <b-row>
       <b-col cols="6">
-        <h1>All Tasks</h1>
-        <div v-if="tasks.length > 0" class="table-wrap">
-          <table>
-            <tr>
-              <td style="text-align: center">Title</td>
-              <td style="text-align: center">Priority</td>
-              <td style="text-align: center">State</td>
-              <td style="text-align: center">Due Date</td>
-              <td style="text-align: center">Actions</td>
-            </tr>
-            <tr v-for="task in topLevelTasks" v-bind:key="task.id">
-              <td><a href="#/tasks" @click.prevent="selectTask(task.id)">{{ task.title }}</a></td>
-              <td>{{ priorityMap[task.priority_id] }}</td>
-              <td>{{ stateMap[task.state_id] }}</td>
-              <td>{{ task.due_date }}</td>
-              <td align="center">
-                <router-link v-bind:to="{ name: 'NewTask', params: { parentId: task.id } }">Create Subtask</router-link> |
-                <router-link v-bind:to="{ name: 'EditTask', params: { id: task.id } }">Edit</router-link> |
-                <a href="#" @click="deleteTask(task.id)">Delete</a>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div v-else>
-          There are no tasks, add one! <br><br>
-          <router-link v-bind:to="{ name: 'NewTask' }" class="add_task_link">Add Task</router-link>
+        <div v-if="prioritiesLoaded && statesLoaded">
+          <h1>All Tasks</h1>
+          <div v-if="tasks.length > 0" class="table-wrap">
+            <table>
+              <tr>
+                <td style="text-align: center">Title</td>
+                <td style="text-align: center">Priority</td>
+                <td style="text-align: center">State</td>
+                <td style="text-align: center">Due Date</td>
+                <td style="text-align: center">Actions</td>
+              </tr>
+              <tr v-for="task in topLevelTasks" v-bind:key="task.id">
+                <td><a href="#/tasks" @click.prevent="selectTask(task.id)">{{ task.title }}</a></td>
+                <td>{{ priorityMap[task.priority_id] }}</td>
+                <td>{{ stateMap[task.state_id] }}</td>
+                <td>{{ task.due_date }}</td>
+                <td align="center">
+                  <router-link v-bind:to="{ name: 'NewTask', params: { parentId: task.id } }">Create Subtask</router-link> |
+                  <router-link v-bind:to="{ name: 'EditTask', params: { id: task.id } }">Edit</router-link> |
+                  <a href="#" @click="deleteTask(task.id)">Delete</a>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div v-else>
+            There are no tasks, add one! <br><br>
+            <router-link v-bind:to="{ name: 'NewTask' }" class="add_task_link">Add Task</router-link>
+          </div>
         </div>
       </b-col>
       <b-col cols="6">
@@ -56,7 +58,7 @@
                   <td>{{ tasks[taskIndex].due_date }}</td>
                   <td align="center">
                     <router-link v-bind:to="{ name: 'EditTask', params: { id: tasks[taskIndex].id } }">Edit</router-link> |
-                    <a href="#" @click="deleteTask(taskIndex)">Delete</a>
+                    <a href="#" @click="deleteTask(tasks[taskIndex].id)">Delete</a>
                   </td>
                 </tr>
               </table>
@@ -103,7 +105,9 @@ export default {
       selectedTaskIndex: -1, // The index of the currently selected task in the tasks array.
       subtaskIndices: [], // The indeces of all subtasks in the currently selected task in the tasks array.
       comments: [], // The comments for the currently selected task.
-      commentToAdd: '' // The comment to add to the currently selected task.
+      commentToAdd: '', // The comment to add to the currently selected task.
+      prioritiesLoaded: false, // Whether the priorities have been loaded yet.
+      statesLoaded: false // Whether the states have been loaded yet.
     }
   },
   mounted () {
@@ -122,20 +126,22 @@ export default {
   methods: {
     // Get all of the needed information when the user selects a task.
     selectTask (id) {
-      this.selectedTask = id
-      // Get this task's index in the tasks array.
-      this.selectedTaskIndex = this.tasks.findIndex((task) => {
-        return task.id === id
-      })
-      // Get all subtask indices for the selected task.
-      this.subtaskIndices = []
-      for (var i = 0; i < this.tasks.length; i++) {
-        if (this.tasks[i].parent_task_id === id) {
-          this.subtaskIndices.push(i)
+      if (id !== -1) {
+        this.selectedTask = id
+        // Get this task's index in the tasks array.
+        this.selectedTaskIndex = this.tasks.findIndex((task) => {
+          return task.id === id
+        })
+        // Get all subtask indices for the selected task.
+        this.subtaskIndices = []
+        for (var i = 0; i < this.tasks.length; i++) {
+          if (this.tasks[i].parent_task_id === id) {
+            this.subtaskIndices.push(i)
+          }
         }
+        // Get all comments for the selected task.
+        this.fetchComments()
       }
-      // Get all comments for the selected task.
-      this.fetchComments()
     },
     // Build a map of priority id to priority name.
     async buildPriorityMap () {
@@ -143,6 +149,7 @@ export default {
       for (var i = 0; i < response.data.length; i++) {
         this.priorityMap[response.data[i].id] = response.data[i].name
       }
+      this.prioritiesLoaded = true
     },
     // Build a map of state id to state name.
     async buildStateMap () {
@@ -150,6 +157,7 @@ export default {
       for (var i = 0; i < response.data.length; i++) {
         this.stateMap[response.data[i].id] = response.data[i].name
       }
+      this.statesLoaded = true
     },
     // Fetch all tasks.
     async fetchTasks () {
@@ -163,10 +171,8 @@ export default {
     // Delete the task with the given id.
     async deleteTask (id) {
       await TasksService.deleteTask(id)
-      if (this.selectedTask === id) {
-        this.selectedTask = -1
-      }
-      this.$router.push({ name: 'Tasks' })
+      this.selectedTask = -1
+      this.fetchTasks()
     },
     // Fetch all comments.
     async fetchComments () {
